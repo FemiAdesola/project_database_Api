@@ -10,6 +10,8 @@ const memberSchema = new Schema({
   },
   email: {
     type: String,
+    unique: true, // prevent duplicates in DB
+    lowercase: true,
     trim: true,
   },
   role: {
