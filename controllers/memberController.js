@@ -33,3 +33,22 @@ exports.getMembers = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error fetching members' });
   }
 };
+
+
+// GET member by id
+exports.getMemberById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid member id' });
+  }
+
+  try {
+    const member = await Member.findById(req.params.id);
+    if (!member) {
+        return res.status(404).json({ success: false, message: 'Member not found' });
+    } else {
+        res.status(200).json({ success: true, data: member });
+    }
+  } catch {
+    res.status(500).json({ success: false, message: 'Server error fetching member' });
+  }
+};
