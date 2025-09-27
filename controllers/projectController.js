@@ -34,3 +34,22 @@ exports.getProjects = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error fetching projects' });
   }
 };
+
+// GET project by id
+exports.getProjectById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid project id' });
+  }
+
+  try {
+    const project = await Project.findById(req.params.id).populate('members', 'name -_id');
+    if (!project)
+        {
+            return res.status(404).json({ success: false, message: 'Project not found' });
+        }else {
+            res.status(200).json({ success: true, data: project });
+        }
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error fetching project' });
+  }
+};
