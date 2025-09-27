@@ -5,13 +5,18 @@ const Member = require('../models/memberModel');
 exports.addMember = async (req, res) => {
   try {
     const { name, email, role } = req.body;
-    if (!name) return res.status(400).json({ success: false, message: 'Name is required' });
-    if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+    if (!name) {
+        res.status(400).json({ success: false, message: 'Name is required' });
+    }
+       
+    if (!email) {
+        res.status(400).json({ success: false, message: 'Email is required' });
+    }
 
     // Check if email already exists
     const existing = await Member.findOne({ email });
     if (existing) {
-      return res.status(400).json({ success: false, message: 'Member with this email already exists' });
+        res.status(400).json({ success: false, message: 'Member with this email already exists' });
     }
 
     const newMember = new Member({ name, email, role });
@@ -44,7 +49,7 @@ exports.getMemberById = async (req, res) => {
   try {
     const member = await Member.findById(req.params.id);
     if (!member) {
-        return res.status(404).json({ success: false, message: 'Member not found' });
+        res.status(404).json({ success: false, message: 'Member not found' });
     } else {
         res.status(200).json({ success: true, data: member });
     }
@@ -66,11 +71,29 @@ exports.updateMember = async (req, res) => {
     });
     if (!updated)
     {
-        return res.status(404).json({ success: false, message: 'Member not found and not updated'});
+        res.status(404).json({ success: false, message: 'Member not found and not updated'});
     } else {
         res.status(200).json({ success: true, data: updated });
     }
   } catch {
     res.status(500).json({ success: false, message: 'Server error updating member' });
+  }
+};
+
+// DELETE member
+exports.deleteMember = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid member id' });
+  }
+
+  try {
+    const deleted = await Member.findByIdAndDelete(req.params.id);
+    if (deleted){
+        res.status(200).json({ success: true, message: 'Member deleted' });
+    } else{
+        res.status(404).json({ success: false, message: 'Member not found' });
+    }
+  } catch {
+    res.status(500).json({ success: false, message: 'Server error deleting member' });
   }
 };
