@@ -6,17 +6,17 @@ exports.addMember = async (req, res) => {
   try {
     const { name, email, role } = req.body;
     if (!name) {
-        res.status(400).json({ success: false, message: 'Name is required' });
+        return res.status(400).json({ success: false, message: 'Name is required' });
     }
        
     if (!email) {
-        res.status(400).json({ success: false, message: 'Email is required' });
+        return res.status(400).json({ success: false, message: 'Email is required' });
     }
 
     // Check if email already exists
     const existing = await Member.findOne({ email });
     if (existing) {
-        res.status(400).json({ success: false, message: 'Member with this email already exists' });
+        return res.status(400).json({ success: false, message: 'Member with this email already exists' });
     }
 
     const newMember = new Member({ name, email, role });
@@ -28,17 +28,15 @@ exports.addMember = async (req, res) => {
   }
 };
 
-
 // GET all members
 exports.getMembers = async (req, res) => {
   try {
     const members = await Member.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, count: members.length, data: members });
+    return res.status(200).json({ success: true, count: members.length, data: members });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error fetching members' });
   }
 };
-
 
 // GET member by id
 exports.getMemberById = async (req, res) => {
@@ -49,9 +47,9 @@ exports.getMemberById = async (req, res) => {
   try {
     const member = await Member.findById(req.params.id);
     if (!member) {
-        res.status(404).json({ success: false, message: 'Member not found' });
+        return res.status(404).json({ success: false, message: 'Member not found' });
     } else {
-        res.status(200).json({ success: true, data: member });
+        return res.status(200).json({ success: true, data: member });
     }
   } catch {
     res.status(500).json({ success: false, message: 'Server error fetching member' });
@@ -71,7 +69,7 @@ exports.updateMember = async (req, res) => {
     });
     if (!updated)
     {
-        res.status(404).json({ success: false, message: 'Member not found and not updated'});
+        return res.status(404).json({ success: false, message: 'Member not found and not updated'});
     } else {
         res.status(200).json({ success: true, data: updated });
     }
@@ -91,7 +89,7 @@ exports.deleteMember = async (req, res) => {
     if (deleted){
         res.status(200).json({ success: true, message: 'Member deleted' });
     } else{
-        res.status(404).json({ success: false, message: 'Member not found' });
+        return res.status(404).json({ success: false, message: 'Member not found' });
     }
   } catch {
     res.status(500).json({ success: false, message: 'Server error deleting member' });

@@ -3,6 +3,7 @@ const { Schema } = mongoose; // Destructure Schema from mongoose
 
 // Define the Project schema
 const projectSchema = new Schema({
+  projectId: { type: String, unique: true },
   title: {
     type: String,
     required: [true, 'Project title is required'],
@@ -23,11 +24,20 @@ const projectSchema = new Schema({
 
   // Reference Member documents
   members: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
+}, { timestamps: true });
 
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+// Auto-generate projectId before saving
+projectSchema.pre('save', async function(next) {
+  if (!this.projectId) {
+    try {
+      const Project = mongoose.model('Project'); // Avoids OverwriteModelError
+      const count = await Project.countDocuments();
+      this.projectId = `PRJ-${(count + 1).toString().padStart(3, '0')}`;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
 });
 
 // Create and export the Project model
