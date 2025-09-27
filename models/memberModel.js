@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 const { Schema } = mongoose; // Destructure Schema from mongoose
 
 // Define the Member schema
@@ -24,5 +24,4 @@ const memberSchema = new Schema({
 });
 
 // Create and export the Member model
-const Member = mongoose.model('Member', memberSchema);
-export default Member;
+module.exports = mongoose.model('Member', memberSchema);

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 const { Schema } = mongoose; // Destructure Schema from mongoose
 
 // Define the Project schema
@@ -31,5 +31,4 @@ const projectSchema = new Schema({
 });
 
 // Create and export the Project model
-const Project = mongoose.model('Project', projectSchema);
-export default Project;
+module.exports = mongoose.model('Project', projectSchema);

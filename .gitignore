@@ -1,10 +1,12 @@
 node_modules
 /Steps_for_mongodb.md
 
-
+/insertData.js
 
 # misc
 .DS_Store
 .env
 .env.local
 npm-debug.log
+
+note.md
