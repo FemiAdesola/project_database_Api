@@ -52,3 +52,25 @@ exports.getMemberById = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error fetching member' });
   }
 };
+
+// PUT update member
+exports.updateMember = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid member id'});
+  }
+
+  try {
+    const updated = await Member.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updated)
+    {
+        return res.status(404).json({ success: false, message: 'Member not found and not updated'});
+    } else {
+        res.status(200).json({ success: true, data: updated });
+    }
+  } catch {
+    res.status(500).json({ success: false, message: 'Server error updating member' });
+  }
+};
