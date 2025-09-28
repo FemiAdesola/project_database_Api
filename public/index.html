@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Project API Playground</title>
+  <title>Project database API</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -10,10 +10,10 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Project API Playground</a>
+      <a class="navbar-brand" href="#">Project database API</a>
     </div>
   </nav>
-
+ <main class="container text-center my-5 col-md-6">
   <div class="container">
 
     <!-- Login -->
@@ -31,22 +31,22 @@
             <button type="submit" class="btn btn-primary">Login</button>
           </div>
         </form>
-        <pre id="output" class="mt-3 bg-light p-2 border rounded"></pre>
+        <pre id="output" class="mt-3 text-start bg-light p-2 border rounded"></pre>
       </div>
     </div>
 
     <!-- Get Projects -->
     <div class="card mb-4 shadow">
-      <div class="card-header bg-success text-white">📂 View Projects</div>
+      <div class="card-header bg-success text-white">View Projects</div>
       <div class="card-body">
         <button id="getProjects" class="btn btn-success mb-3">Get Projects</button>
-        <pre id="projects" class="bg-light p-2 border rounded"></pre>
+        <pre id="projects" class="mt-3 text-start bg-light p-2 border rounded"></pre>
       </div>
     </div> 
 
     <!-- Add Project -->
     <div class="card mb-4 shadow">
-      <div class="card-header bg-info text-white">➕ Add Project (Admin)</div>
+      <div class="card-header bg-info text-white"> Add Project (Admin)</div>
       <div class="card-body">
         <form id="addProjectForm" class="row g-3">
           <div class="col-md-6">
@@ -71,15 +71,15 @@
             <button type="submit" class="btn btn-info text-white">Add Project</button>
           </div>
         </form>
-        <pre id="addProjectOutput" class="mt-3 bg-light p-2 border rounded"></pre>
+        <pre id="addProjectOutput" class="mt-3 text-start bg-light p-2 border rounded"></pre>
       </div>
     </div>
 
     <!-- Update Project -->
     <div class="card mb-4 shadow">
-      <div class="card-header bg-warning text-dark">✏️ Update Project (Admin)</div>
+      <div class="card-header bg-warning text-dark">Update Project (Admin)</div>
       <div class="card-body">
-        <form id="updateProjectForm" class="row g-3">
+        <form id="updateProjectForm" class="row g-3 ">
           <div class="col-md-12">
             <input type="text" id="updateId" class="form-control" placeholder="Project ID (Mongo _id)" required>
           </div>
@@ -92,6 +92,9 @@
           <div class="col-md-6">
             <input type="text" id="updateStatus" class="form-control" placeholder="New Status">
           </div>
+          <div class="col-md-6">
+            <input type="text" id="updateMembers" class="form-control" placeholder="Member IDs (comma separated)">
+            </div>
           <div class="col-md-3">
             <input type="date" id="updateStartDate" class="form-control">
           </div>
@@ -102,11 +105,12 @@
             <button type="submit" class="btn btn-warning text-dark">Update Project</button>
           </div>
         </form>
-        <pre id="updateProjectOutput" class="mt-3 bg-light p-2 border rounded"></pre>
+        <pre id="updateProjectOutput" class="mt-3 text-start bg-light p-2 border rounded"></pre>
       </div>
     </div>
 
   </div>
+  </main>
 
   <script>
     let token = null; // store JWT
@@ -193,12 +197,20 @@
       }
 
       const id = document.getElementById("updateId").value;
+      // Get members from input (comma-separated) and convert to array
+      const membersInput = document.getElementById("updateMembers").value;
+      const members = membersInput
+        .split(",")
+        .map(m => m.trim())
+        .filter(m => m);
+
       const body = {
         title: document.getElementById("updateTitle").value || undefined,
         description: document.getElementById("updateDescription").value || undefined,
         status: document.getElementById("updateStatus").value || undefined,
         startDate: document.getElementById("updateStartDate").value || undefined,
-        endDate: document.getElementById("updateEndDate").value || undefined
+        endDate: document.getElementById("updateEndDate").value || undefined,
+        members: members.length > 0 ? members : undefined
       };
 
       const res = await fetch("https://project-database-api.onrender.com/api/projects/" + id, {
