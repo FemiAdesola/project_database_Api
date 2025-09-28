@@ -95,6 +95,9 @@ npm start
 ---
 
 ### 👥 Members
+> Add endpoint to this link https://project-database-api.onrender.com
+* For example https://project-database-api.onrender.com/api/members//api/members/
+
 | Method | Endpoint             | Description          | Access |
 |--------|----------------------|----------------------|--------|
 | POST   | `/api/members`       | Create new member    | Public |
@@ -106,6 +109,7 @@ npm start
 ---
 
 ### 📂 Projects
+
 | Method | Endpoint             | Description           | Access |
 |--------|----------------------|-----------------------|--------|
 | POST   | `/api/projects`      | Create new project    | Admin only |
