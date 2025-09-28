@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose; // Destructure Schema from mongoose
+const Counter = require('./counterModel'); // import the counter model
 
 // Define the Project schema
 const projectSchema = new Schema({
@@ -26,13 +27,19 @@ const projectSchema = new Schema({
   members: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
 }, { timestamps: true });
 
-// Auto-generate projectId before saving
-projectSchema.pre('save', async function(next) {
-  if (!this.projectId) {
+// Auto-generate projectId before saving a new project
+projectSchema.pre('save', async function (next) {
+  if (this.isNew && !this.projectId) {
     try {
-      const Project = mongoose.model('Project'); // Avoids OverwriteModelError
-      const count = await Project.countDocuments();
-      this.projectId = `PRJ-${(count + 1).toString().padStart(3, '0')}`;
+      // Increment the counter and get the next sequence number
+      const counter = await Counter.findOneAndUpdate( 
+        { name: 'projectId' },
+        { $inc: { seq: 1 } },
+        { new: true, upsert: true }
+      );
+
+      // Format the projectId as "PRJ-XXX"
+      this.projectId = `PRJ-${counter.seq.toString().padStart(3, '0')}`;
     } catch (err) {
       return next(err);
     }

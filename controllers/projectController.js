@@ -53,3 +53,42 @@ exports.getProjectById = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error fetching project' });
   }
 };
+
+// PUT update project
+exports.updateProject = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid project id' });
+  }
+
+  try {
+    const updated = await Project.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate('members');
+    if (!updated) {
+        return res.status(404).json({ success: false, message: 'Project not found' });
+    } else {
+        res.status(200).json({ success: true, data: updated });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error updating project' });
+  }
+};
+
+// DELETE project
+exports.deleteProject = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ success: false, message: 'Invalid project id' });
+  }
+
+  try {
+    const deleted = await Project.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+        return res.status(404).json({ success: false, message: 'Project not found' });
+    } else{
+        res.status(200).json({ success: true, message: 'Project deleted' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Server error deleting project' });
+  }
+};
