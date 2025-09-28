@@ -8,6 +8,7 @@ const connectDB = require('./db/db');
 // Import routers
 const memberRouter = require('./routes/memberRoutes');
 const projectRouter = require('./routes/projectRoutes');
+const authRouter = require('./routes/authRoutes');
 
 const port = process.env.PORT || 4000;
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use('/api/members', memberRouter);
 app.use('/api/projects', projectRouter);
+app.use('/api/auth', authRouter);
 
 
 app.listen(port, () =>

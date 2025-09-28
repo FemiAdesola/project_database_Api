@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose; // Destructure Schema from mongoose
+const bcrypt = require('bcryptjs');
 
 // Define the Member schema
 const memberSchema = new Schema({
@@ -14,9 +15,14 @@ const memberSchema = new Schema({
     lowercase: true,
     trim: true,
   },
+   password: {
+    type: String,
+    required: [true, 'Password is required'],
+    minlength: 6,
+  },
   role: {
     type: String,
-    enum: ['developer', 'designer', 'manager', 'tester', 'other'],
+    enum: ['admin', 'developer', 'designer', 'manager', 'tester', 'other'],
     default: 'developer',
   },
   createdAt: {
@@ -24,6 +30,19 @@ const memberSchema = new Schema({
     default: Date.now,
   },
 });
+
+// Hash password before saving
+memberSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 // Create and export the Member model
 module.exports = mongoose.model('Member', memberSchema);
