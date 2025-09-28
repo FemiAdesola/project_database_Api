@@ -42,6 +42,8 @@ View the website link [here](https://project-database-api.onrender.com/)
 │   ├── counterModel.js
 │   ├── memberModel.js
 │   └── projectModel.js
+├── public/
+│   └── index.html           # HTML to display quick login
 ├── routes/             # Express routes
 │   ├── authRoutes.js
 │   ├── memberRoutes.js
@@ -153,6 +155,44 @@ curl -X POST http://localhost:4000/api/projects -H "Authorization: Bearer <token
   "endDate": "2025-03-01",
   "members": ["member_id_1","member_id_2"]
 }'
+```
+### for the members
+#### Create or add a member (POST /api/members)
+```bash
+curl -X POST "http://localhost:4000/api/members" 
+  -H "Content-Type: application/json" 
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "role": "developer"
+  }'
+```
+#### Get all members (GET /api/members)
+```bash
+curl -X GET "http://localhost:4000/api/members" 
+  -H "Content-Type: application/json" 
+```
+
+#### Get member by ID (GET /api/members/:id)
+```bash
+curl -X GET "http://localhost:4000/api/members/68d944ee60fe5db5172ba0fb" 
+  -H "Content-Type: application/json" 
+```
+#### Update member (PUT /api/members/:id)
+```bash
+curl -X PUT "http://localhost:4000/api/members/68d944ee60fe5db5172ba0fb" 
+  -H "Content-Type: application/json" 
+  -d '{
+    "name": "Jane Doe",
+    "role": "manager"
+  }'
+```
+
+#### Delete member (DELETE /api/members/:id)
+```bash
+curl -X DELETE "http://localhost:4000/api/members/68d944ee60fe5db5172ba0fb" 
+  -H "Content-Type: application/json" 
 ```
 
 ---
