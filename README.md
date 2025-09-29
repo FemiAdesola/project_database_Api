@@ -311,4 +311,10 @@ fetch("https://project-database-api.onrender.com/api/projects/68d978a7461f015***
 .catch(err => console.error("Fetch error:", err));
 ```
 
-© 2025 [Femi Adesola Oyinloye](https://github.com/FemiAdesola)
+## 3.5	A simple and structured interface for testing the backend API for projects database
+> In this project, HTML was used to create a simple and structured interface for testing the backend API directly in the browser, specifically for the project's database. This interface included basic forms and elements such as input fields and buttons for login, as well as Create, Read, and Update operations. 
+
+![html_page_1](/img/Html.png)
+![html_page_2](/img/Html1.png)
+
+[Femi Adesola Oyinloye](https://github.com/FemiAdesola) © 2025 
