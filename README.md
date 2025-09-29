@@ -197,4 +197,118 @@ curl -X DELETE "http://localhost:4000/api/members/68d944ee60fe5db5172ba0fb"
 
 ---
 
+### Example of Testing API through browser console in Inspect (DevTools)
+
+```js
+fetch("https://project-database-api.onrender.com/api/members", {
+  method: "GET",
+  headers: { "Content-Type": "application/json" },
+})
+.then(res => res.json())
+.then(data => console.log("Login response:", data));
+
+```
+
+## getby id
+```js
+fetch("https://project-database-api.onrender.com/api/members/68d9478ef7a27f9a75697e91", {
+  method: "GET",
+  headers: { "Content-Type": "application/json" },
+})
+.then(res => res.json())
+.then(data => console.log("Login response:", data));
+```
+
+
+## update
+```js
+fetch("https://project-database-api.onrender.com/api/members/68d9478ef7a27f9a75697e91", {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+  name: "Femi2",
+  email: "fe2@example.com",
+  password: "*******",
+  role: "developer"
+  })
+})
+.then(res => res.json())
+.then(data => console.log("Login response:", data));
+```
+
+## delete
+```js
+fetch("https://project-database-api.onrender.com/api/members/68d97d1117514b7b2e5bf7e0", {
+  method: "DELETE",
+  headers: { "Content-Type": "application/json" },
+})
+.then(res => res.json())
+.then(data => console.log("Login response:", data));
+```
+
+### get project
+```js
+fetch("https://project-database-api.onrender.com/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email: "fem@example.com",
+    password: "*******"
+  })
+})
+.then(res => res.json())
+.then(data => console.log("Login response:", data));
+```
+
+### get project all project
+```js
+
+fetch("https://project-database-api.onrender.com/api/projects", {
+  method: "GET",
+  headers: {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDk0NGVlNjBmZTVkYjUxNzJiYTBmYiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTA4NjMwOSwiZXhwIjoxNzU5MDg5OTA5fQ.D0Y2G6zgPkf7oJVkgOZrNlhqF99i4ZbtJxiW6Q3*******",
+    "Content-Type": "application/json"
+  }
+})
+.then(res => res.json())
+.then(data => console.log("Projects:", data))
+.catch(err => console.error("Fetch error:", err));
+```
+
+### get project by ID
+```js
+
+fetch("https://project-database-api.onrender.com/api/projects/68d978a7461f015d*******", {
+  method: "GET",
+  headers: {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDk0NGVlNjBmZTVkYjUxNzJiYTBmYiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTA4NjMwOSwiZXhwIjoxNzU5MDg5OTA5fQ.D0Y2G6zgPkf7oJVkgOZrNlhqF99i4ZbtJxiW6Q3******",
+    "Content-Type": "application/json"
+  }
+})
+.then(res => res.json())
+.then(data => console.log("Projects:", data))
+.catch(err => console.error("Fetch error:", err));
+```
+
+### get project by ID
+```js
+
+fetch("https://project-database-api.onrender.com/api/projects/68d978a7461f015*******", {
+  method: "PUT",
+  headers: {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDk0NGVlNjBmZTVkYjUxNzJiYTBmYiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTA4NjMwOSwiZXhwIjoxNzU5MDg5OTA5fQ.D0Y2G6zgPkf7oJVkgOZrNlhqF99i4ZbtJxiW6Q3*******",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+      "title": "Website Redesign testing",
+      "description": "Redesign the company website",
+      "status": "in-progress",
+      "members": ["68d944ee60fe5db5*******"]
+  })
+})
+.then(res => res.json())
+.then(data => console.log("Projects:", data))
+.catch(err => console.error("Fetch error:", err));
+```
+
 © 2025 [Femi Adesola Oyinloye](https://github.com/FemiAdesola)
