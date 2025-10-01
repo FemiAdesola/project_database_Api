@@ -13,7 +13,7 @@ exports.addProject = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Project with this title already exists' });
         }
 
-    const newProject = new Project({ title, description, status, startDate, endDate, members, createdBy: req.member._id });
+    const newProject = new Project({ title, description, status, startDate, endDate, members, createdBy: req.member });
     const saved = await newProject.save();
 
     res.status(201).json({ success: true, data: saved });

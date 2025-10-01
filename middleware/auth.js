@@ -14,7 +14,7 @@ async function auth(req, res, next) {
       return res.status(404).json({ message: 'Member not found' });
     }
 
-    req.user = member;  // Attach member to request
+    req.member = member;  // Attach member to request
     next();
   } catch (err) {
     res.status(401).json({ message: 'Token is not valid' });
