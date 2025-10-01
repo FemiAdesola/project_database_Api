@@ -14,7 +14,6 @@ exports.addProject = async (req, res) => {
         }
 
     const newProject = new Project({ title, description, status, startDate, endDate, members, createdBy: req.member._id });
-    // const newProject = new Project({ title, description, status, startDate, endDate, members });
     const saved = await newProject.save();
 
     res.status(201).json({ success: true, data: saved });
@@ -31,7 +30,7 @@ exports.getProjects = async (req, res) => {
   try {
     const projects = await Project.find()
       .populate('members', 'name -_id')
-      .populate("createdBy", "name role")
+      .populate("createdBy", "name _id role")
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: projects.length, data: projects });
   } catch (err) {
@@ -67,12 +66,6 @@ exports.updateProject = async (req, res) => {
   }
 
   try {
-  //   const updated = await Project.findByIdAndUpdate(req.params.id, req.body, 
-  //     { new: true, runValidators: true, }).populate('members'); 
-  //     if (!updated) { return res.status(404).json({ success: false, message: 'Project not found' });
-  //  } else { 
-  //   res.status(200).json({ success: true, data: updated }); 
-  // }
   const project = await Project.findById(req.params.id);
       if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
 
@@ -99,14 +92,6 @@ exports.deleteProject = async (req, res) => {
   }
 
   try {
-  //   const deleted = await Project.findByIdAndDelete(req.params.id);
-  //  if (!deleted) { 
-  //   return res.status(404).json({ success: false, message: 'Project not found' });
-  //   } 
-  //   // else {
-  //   //   res.status(200).json({ success: true, message: 'Project deleted' });
-  //   // }
-
   const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
 
