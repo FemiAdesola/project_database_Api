@@ -13,8 +13,8 @@ exports.addProject = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Project with this title already exists' });
         }
 
-    // const newProject = new Project({ title, description, status, startDate, endDate, members, createdBy: req.member });
-    const newProject = new Project({ title, description, status, startDate, endDate, members });
+    const newProject = new Project({ title, description, status, startDate, endDate, members, createdBy: req.member._id });
+    // const newProject = new Project({ title, description, status, startDate, endDate, members });
     const saved = await newProject.save();
 
     res.status(201).json({ success: true, data: saved });
@@ -31,7 +31,7 @@ exports.getProjects = async (req, res) => {
   try {
     const projects = await Project.find()
       .populate('members', 'name -_id')
-      // .populate("createdBy", "name")
+      .populate("createdBy", "name role")
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: projects.length, data: projects });
   } catch (err) {
@@ -48,7 +48,7 @@ exports.getProjectById = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id)
       .populate('members', 'name -_id')
-      // .populate("createdBy", "name");
+      .populate("createdBy", "name role");
     if (!project)
         {
           return res.status(404).json({ success: false, message: 'Project not found' });
@@ -67,13 +67,26 @@ exports.updateProject = async (req, res) => {
   }
 
   try {
-    const updated = await Project.findByIdAndUpdate(req.params.id, req.body, 
-      { new: true, runValidators: true, }).populate('members'); 
-      if (!updated) { return res.status(404).json({ success: false, message: 'Project not found' });
-   } else { 
-    res.status(200).json({ success: true, data: updated }); 
-  }
-    
+  //   const updated = await Project.findByIdAndUpdate(req.params.id, req.body, 
+  //     { new: true, runValidators: true, }).populate('members'); 
+  //     if (!updated) { return res.status(404).json({ success: false, message: 'Project not found' });
+  //  } else { 
+  //   res.status(200).json({ success: true, data: updated }); 
+  // }
+  const project = await Project.findById(req.params.id);
+      if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
+
+      if (project.createdBy.toString() !== req.member._id.toString()) {
+        return res.status(403).json({ success: false, message: 'Not authorized to edit this project' });
+      }
+
+      const updated = await Project.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+      }).populate('members');
+
+    res.status(200).json({ success: true, data: updated });
+      
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error updating project' });
   }
@@ -86,12 +99,23 @@ exports.deleteProject = async (req, res) => {
   }
 
   try {
-    const deleted = await Project.findByIdAndDelete(req.params.id);
-   if (!deleted) { 
-    return res.status(404).json({ success: false, message: 'Project not found' });
-    } else {
-      res.status(200).json({ success: true, message: 'Project deleted' });
+  //   const deleted = await Project.findByIdAndDelete(req.params.id);
+  //  if (!deleted) { 
+  //   return res.status(404).json({ success: false, message: 'Project not found' });
+  //   } 
+  //   // else {
+  //   //   res.status(200).json({ success: true, message: 'Project deleted' });
+  //   // }
+
+  const project = await Project.findById(req.params.id);
+    if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
+
+    if (project.createdBy.toString() !== req.member._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized to delete this project' });
     }
+
+    await project.deleteOne();
+    res.status(200).json({ success: true, message: 'Project deleted' });
 
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error deleting project' });

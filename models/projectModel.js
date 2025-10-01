@@ -20,11 +20,11 @@ const projectSchema = new Schema({
     enum: ['planned', 'in-progress', 'completed', 'on-hold', 'cancelled'],
     default: 'planned',
   },
-//   createdBy: {
-//   type: mongoose.Schema.Types.ObjectId,
-//   ref: "Member",
-//   required: true
-// },
+  createdBy: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Member",
+  required: true
+},
   startDate: Date,
   endDate: Date,
 
