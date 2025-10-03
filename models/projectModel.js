@@ -25,8 +25,18 @@ const projectSchema = new Schema({
   ref: "Member",
   required: true
 },
-  startDate: Date,
-  endDate: Date,
+  startDate: { type: Date, required: true },
+  endDate: {
+    type: Date,
+    required: true,
+    validate: {
+      validator: function (value) {
+        // ensure endDate >= startDate
+        return !this.startDate || value >= this.startDate;
+      },
+      message: 'End date must be greater than or equal to start date',
+    },
+  },
 
   // Reference Member documents
   members: [{ type: Schema.Types.ObjectId, ref: 'Member' }],
