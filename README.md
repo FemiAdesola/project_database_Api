@@ -317,4 +317,10 @@ fetch("https://project-database-api.onrender.com/api/projects/68d978a7461f015***
 ![html_page_1](/img/Html.png)
 ![html_page_2](/img/Html1.png)
 
-[Femi Adesola Oyinloye](https://github.com/FemiAdesola) © 2025 
+
+## 🧾 License
+
+MIT License [Femi Adesola Oyinloye](https://github.com/FemiAdesola) © 2025 
+
+Feel free to fork, modify, and share!
+
